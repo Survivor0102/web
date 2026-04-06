@@ -44,7 +44,7 @@ web/
 ### 客服端功能
 - ✅ 客服工作台（多会话并行管理）
 - ✅ 实时消息推送
-- ✅ 会话分配与转接
+- ✅ 会话分配与转接（自动分配 + 手动接单 + 客服间转接）
 - ✅ 快捷回复模板
 - ✅ FAQ知识库调用
 - ✅ 客服在线状态管理
@@ -90,6 +90,15 @@ conda activate web
 #### 前端环境
 确保已安装Node.js (>=16.0.0) 和 npm。
 
+#### 数据库
+项目已包含完整的测试数据库文件 (`backend/app.db`)，包含：
+- **6个测试用户**（3个普通用户 + 3个客服）
+- **25个测试会话**及历史消息
+- **FAQ知识库**数据
+- **客服状态**记录
+
+无需初始化数据库，直接启动即可使用测试数据。
+
 ### 2. 启动后端服务器
 
 ```bash
@@ -124,12 +133,14 @@ npm run dev
 2. 使用以下测试账户登录：
 
    **普通用户：**
-   - 用户名: `testuser`
-   - 密码: `test123`
+   - 用户名: `testuser` (密码: `test123`)
+   - 用户名: `testuser2` (密码: `test123`)
+   - 用户名: `testuser3` (密码: `test123`)
 
    **客服人员：**
-   - 用户名: `testagent`
-   - 密码: `agent123`
+   - 用户名: `testagent` (密码: `agent123`)
+   - 用户名: `agent001` (密码: `test123`)
+   - 用户名: `agent002` (密码: `Xa21J@W3q$9a` - 随机生成)
 
 3. 普通用户可以：
    - 点击首页的"需要对接"按钮发起客服咨询
@@ -138,6 +149,9 @@ npm run dev
 4. 客服人员可以：
    - 访问"客服工作台"管理多个会话
    - 切换在线状态（在线/忙碌/离开/离线）
+   - 查看并接单等待中的会话
+   - 将会话转接给其他在线客服
+   - 使用快捷回复模板和FAQ知识库
 
 ## API文档
 
@@ -151,6 +165,9 @@ npm run dev
 - `GET /api/customer-service/session/{id}` - 获取会话详情
 - `GET /api/customer-service/session/{id}/messages` - 获取会话消息
 - `POST /api/customer-service/session/{id}/send` - 发送消息
+- `POST /api/customer-service/session/{id}/accept` - 客服主动接单（需客服角色）
+- `POST /api/customer-service/session/{id}/transfer` - 转接会话给其他客服（需客服角色）
+- `POST /api/customer-service/session/{id}/close` - 关闭会话
 - `GET /api/customer-service/sessions` - 获取用户会话列表
 - `GET /api/customer-service/agent/sessions` - 获取客服会话列表（需客服角色）
 - `PUT /api/customer-service/agent/status` - 更新客服状态（需客服角色）
@@ -164,6 +181,13 @@ npm run dev
 - `session_transferred` - 会话转接通知
 
 ## 数据库设计
+
+### 测试数据库
+项目包含完整的测试数据库文件 (`backend/app.db`)，开箱即用。包含：
+- **6个测试用户**：3个普通用户 + 3个客服账户
+- **25个测试会话**：涵盖多种场景的对话记录
+- **FAQ知识库**：预设的常见问题与答案
+- **客服状态记录**：在线/离线状态管理
 
 ### 核心表结构
 - **users** - 用户表（含角色字段）
@@ -181,17 +205,18 @@ npm run dev
 3. 未来可以扩展管理界面
 
 ### 创建客服账户
-目前需要通过代码创建客服账户：
-```python
-# 在Flask应用中创建客服账户
-user = User(
-    username='客服用户名',
-    email='客服邮箱',
-    role='agent',
-    agent_skill_tags=['技能1', '技能2']
-)
-user.set_password('密码')
+项目提供了专门的脚本创建客服账户：
+
+```bash
+# 使用create_agent.py脚本
+cd backend
+python create_agent.py
+
+# 或指定用户名/邮箱/密码
+python create_agent.py --username 自定义用户名 --email 自定义邮箱 --password 自定义密码
 ```
+
+脚本会自动生成唯一用户名（如agent001, agent002等）和随机密码，并设置默认技能标签。
 
 ### 扩展管理员功能
 系统已预留管理员角色，只需：
@@ -225,9 +250,10 @@ flask db upgrade
 - 检查防火墙设置
 
 ### 2. 数据库问题
-- 首次运行会自动创建SQLite数据库
+- 项目已包含测试数据库文件 (`backend/app.db`)，无需初始化
 - 确认有数据库文件的写入权限
-- 如需重置数据库，删除 `backend/app.db` 文件后重新运行
+- 如需重置数据库，删除 `backend/app.db` 文件后重新启动后端服务（会创建空数据库）
+- 如需使用测试数据，可从GitHub仓库重新获取原始数据库文件
 
 ### 3. 前端依赖安装失败
 - 使用淘宝npm镜像：`npm config set registry https://registry.npmmirror.com`

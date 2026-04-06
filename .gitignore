@@ -63,6 +63,6 @@ out/
 *.temp
 
 # Project specific
-backend/app.db
+# backend/app.db  # 用户要求上传测试数据库
 backend/instance/
 frontend/.env
