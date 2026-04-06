@@ -182,6 +182,20 @@ export const useChatStore = defineStore('chat', () => {
     }
   }
 
+  // 转接会话给其他客服（仅客服角色可用）
+  const transferSession = async (sessionId, toAgentId, note = '') => {
+    try {
+      const response = await api.post(`/customer-service/session/${sessionId}/transfer`, {
+        to_agent_id: toAgentId,
+        note: note
+      })
+      return response.data
+    } catch (error) {
+      console.error('转接会话失败:', error)
+      throw error
+    }
+  }
+
   // 清空当前会话
   const clearCurrentSession = () => {
     currentSession.value = null
@@ -241,6 +255,7 @@ export const useChatStore = defineStore('chat', () => {
     sendMessage,
     closeSession,
     acceptSession,
+    transferSession,
     getOnlineAgents,
     searchFAQ,
     getFAQCategories,

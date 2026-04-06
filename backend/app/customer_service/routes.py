@@ -356,6 +356,39 @@ def accept_session(session_id):
         'session': session.to_dict()
     })
 
+@customer_service_bp.route('/session/<session_id>/transfer', methods=['POST'])
+@require_agent_or_admin
+def transfer_session(session_id):
+    """转接会话给其他客服"""
+    data = request.get_json()
+    to_agent_id = data.get('to_agent_id')
+
+    if not to_agent_id:
+        return jsonify({'error': '缺少目标客服ID'}), 400
+
+    # 检查目标客服是否存在且是客服角色
+    to_agent = User.query.get(to_agent_id)
+    if not to_agent or not to_agent.is_agent():
+        return jsonify({'error': '目标客服不存在或无权限'}), 400
+
+    # 获取当前会话
+    session = ChatSession.query.get_or_404(session_id)
+
+    # 权限检查：只有当前负责的客服可以转接会话
+    if session.agent_id != g.current_user.id and not g.current_user.is_admin():
+        return jsonify({'error': '只能转接自己负责的会话'}), 403
+
+    # 使用ChatService转接会话
+    success = chat_service.transfer_session(session_id, to_agent_id)
+
+    if not success:
+        return jsonify({'error': '转接失败'}), 400
+
+    return jsonify({
+        'message': '转接成功',
+        'session': session.to_dict()
+    })
+
 @customer_service_bp.route('/session/<session_id>/close', methods=['POST'])
 @token_required
 def close_session(session_id):

@@ -903,19 +903,24 @@ const confirmTransfer = async () => {
     return
   }
 
+  if (!currentSession.value) {
+    ElMessage.warning('没有可转接的会话')
+    return
+  }
+
   transferring.value = true
   try {
-    // 这里应该调用转接API
-    // 暂时使用WebSocket模拟
-    if (socket && socket.connected) {
-      // 实际应该调用API
-      ElMessage.success('转接请求已发送')
-    }
-
+    // 调用转接API
+    await chatStore.transferSession(currentSession.value.id, transferToAgentId.value, transferNote.value)
+    ElMessage.success('转接成功')
     showTransferDialog.value = false
+
+    // 刷新会话列表
+    loadSessions()
   } catch (error) {
     console.error('转接失败:', error)
-    ElMessage.error('转接失败')
+    const errorMsg = error.response?.data?.error || '转接失败'
+    ElMessage.error(errorMsg)
   } finally {
     transferring.value = false
   }

@@ -168,9 +168,12 @@ class ChatService:
         if not to_agent or not to_agent.is_agent():
             return False
 
+        # 保存原客服ID
+        old_agent_id = session.agent_id
+
         # 更新原客服会话计数
-        if session.agent_id:
-            old_agent_status = AgentStatus.query.get(session.agent_id)
+        if old_agent_id:
+            old_agent_status = AgentStatus.query.get(old_agent_id)
             if old_agent_status:
                 old_agent_status.current_session_count = max(
                     0, old_agent_status.current_session_count - 1
@@ -199,11 +202,11 @@ class ChatService:
         # 通知相关方
         socketio.emit('session_transferred', {
             'session_id': session_id,
-            'from_agent_id': session.agent_id,
+            'from_agent_id': old_agent_id,
             'to_agent_id': to_agent_id
         }, room=f'session_{session_id}')
 
-        socketio.emit('new_session_assigned', {
+        socketio.emit('session_assigned', {
             'session_id': session_id,
             'user_info': session.user.to_dict(),
             'context': session.context
