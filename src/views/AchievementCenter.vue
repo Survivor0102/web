@@ -11,84 +11,113 @@
       <div class="filter-section">
         <!-- 搜索框 -->
         <div class="search-row">
-          <el-input
-            v-model="searchKeyword"
-            placeholder="搜索成果名称、关键词..."
-            class="search-input"
-            @keyup.enter="handleSearch"
-          >
-            <template #append>
-              <el-button :icon="Search" @click="handleSearch" />
-            </template>
-          </el-input>
-          <el-button type="primary" @click="handleSearch">搜索</el-button>
-          <el-button @click="resetFilters">重置</el-button>
+          <div class="search-container">
+            <el-input
+              v-model="searchKeyword"
+              placeholder="搜索成果名称、关键词..."
+              class="search-input"
+              @keyup.enter="handleSearch"
+              size="large"
+            >
+              <template #append>
+                <el-button :icon="Search" @click="handleSearch" />
+              </template>
+            </el-input>
+            <div class="search-actions">
+              <el-button type="primary" @click="handleSearch" size="large">搜索</el-button>
+              <el-button @click="resetFilters" size="large">重置</el-button>
+            </div>
+          </div>
         </div>
 
         <!-- 分类筛选 -->
-        <div class="filter-row">
-          <div class="filter-item">
-            <span class="filter-label">技术领域：</span>
-            <el-select
-              v-model="selectedTechField"
-              placeholder="请选择技术领域"
-              clearable
-            >
-              <el-option
-                v-for="item in techFields"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
+        <div class="filter-grid">
+          <div class="filter-column">
+            <div class="filter-group">
+              <div class="filter-header">
+                <span class="filter-icon">🔍</span>
+                <h3>技术领域</h3>
+              </div>
+              <el-select
+                v-model="selectedTechField"
+                placeholder="全部技术领域"
+                clearable
+                class="filter-select"
+                size="large"
+              >
+                <el-option
+                  v-for="item in techFields"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </div>
+
+            <div class="filter-group">
+              <div class="filter-header">
+                <span class="filter-icon">📊</span>
+                <h3>成果类型</h3>
+              </div>
+              <el-select
+                v-model="selectedAchievementType"
+                placeholder="全部成果类型"
+                clearable
+                class="filter-select"
+                size="large"
+              >
+                <el-option
+                  v-for="item in achievementTypes"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </div>
           </div>
 
-          <div class="filter-item">
-            <span class="filter-label">成果类型：</span>
-            <el-select
-              v-model="selectedAchievementType"
-              placeholder="请选择成果类型"
-              clearable
-            >
-              <el-option
-                v-for="item in achievementTypes"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </div>
+          <div class="filter-column">
+            <div class="filter-group">
+              <div class="filter-header">
+                <span class="filter-icon">📈</span>
+                <h3>成熟度</h3>
+              </div>
+              <el-select
+                v-model="selectedMaturity"
+                placeholder="全部成熟度"
+                clearable
+                class="filter-select"
+                size="large"
+              >
+                <el-option
+                  v-for="item in maturities"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </div>
 
-          <div class="filter-item">
-            <span class="filter-label">成熟度：</span>
-            <el-select
-              v-model="selectedMaturity"
-              placeholder="请选择成熟度"
-              clearable
-            >
-              <el-option
-                v-for="item in maturities"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </div>
-
-          <div class="filter-item">
-            <span class="filter-label">拟转化方式：</span>
-            <el-select
-              v-model="selectedTransformation"
-              placeholder="请选择转化方式"
-              clearable
-            >
-              <el-option
-                v-for="item in transformationMethods"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
+            <div class="filter-group">
+              <div class="filter-header">
+                <span class="filter-icon">🔄</span>
+                <h3>转化方式</h3>
+              </div>
+              <el-select
+                v-model="selectedTransformation"
+                placeholder="全部转化方式"
+                clearable
+                class="filter-select"
+                size="large"
+              >
+                <el-option
+                  v-for="item in transformationMethods"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </div>
           </div>
         </div>
       </div>
@@ -581,34 +610,31 @@ onMounted(() => {
 }
 
 .search-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
-.search-input {
+/* .search-input {
   flex: 1;
   max-width: 400px;
-}
+} */
 
-.filter-row {
+/* .filter-row {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   align-items: center;
-}
+} */
 
-.filter-item {
+/* .filter-item {
   display: flex;
   align-items: center;
   gap: 8px;
-}
+} */
 
-.filter-label {
+/* .filter-label {
   font-weight: 500;
   white-space: nowrap;
-}
+} */
 
 .achievement-list {
   margin-top: 30px;
@@ -730,24 +756,115 @@ onMounted(() => {
   font-size: 14px;
 }
 
+/* 更新搜索区域样式 */
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+}
+
+.search-input {
+  flex: 1;
+}
+
+.search-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* 更新筛选区域样式 */
+.filter-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.filter-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.filter-group {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.filter-group:hover {
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: #409eff;
+}
+
+.filter-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.filter-icon {
+  font-size: 20px;
+}
+
+.filter-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #303133;
+  margin: 0;
+}
+
+.filter-select {
+  width: 100%;
+}
+
+/* 成果卡片改进 */
+.achievement-card {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e9ecef;
+}
+
+.achievement-content {
+  min-height: 180px;
+}
+
+/* 响应式调整 */
 @media (max-width: 768px) {
-  .filter-row {
-    flex-direction: column;
-    align-items: flex-start;
+  .filter-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
   }
 
-  .filter-item {
+  .filter-column {
+    gap: 15px;
+  }
+
+  .filter-group {
+    padding: 15px;
+  }
+
+  .search-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .search-actions {
     width: 100%;
-  }
-
-  .search-row {
-    flex-direction: column;
-    align-items: stretch;
+    justify-content: flex-end;
   }
 
   .search-input {
-    max-width: 100%;
-    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  .achievement-content {
+    min-height: auto;
   }
 }
 </style>
