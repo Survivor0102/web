@@ -1,5 +1,157 @@
-# Vue 3 + Vite
+# 智慧矿山联合实验室平台 - 成果大厅
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+基于Vue 3 + Element Plus + Vue Router的前端项目，用于展示和对接矿山技术创新成果。
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## 🌐 在线演示
+
+项目已部署至：`http://localhost:5174`（开发环境）
+
+## 🚀 技术栈
+
+- **前端框架**: Vue 3 (Composition API + `<script setup>`)
+- **UI组件库**: Element Plus
+- **路由管理**: Vue Router
+- **构建工具**: Vite
+- **开发语言**: JavaScript
+
+## ✨ 功能特性
+
+### 成果大厅页面
+- ✅ **智能搜索**：支持关键词搜索成果名称和描述
+- ✅ **分类筛选**：技术领域、成果类型、成熟度、拟转化方式
+- ✅ **分页展示**：响应式卡片布局，支持分页浏览
+- ✅ **成果卡片**：标签化分类，关键信息一目了然
+
+### 成果详情页面
+- ✅ **完整展示**：技术参数、经济效益、应用领域等详细信息
+- ✅ **附件下载**：支持技术文档、用户手册等资料下载
+- ✅ **相关推荐**：智能推荐同类技术成果
+
+### 对接服务功能
+- ✅ **智能客服**：机器人引导式提问，模板化回答
+- ✅ **人工客服**：支持请求人工客服介入
+- ✅ **收藏功能**：支持成果收藏管理
+
+### 导航与布局
+- ✅ **响应式设计**：适配桌面端和移动端
+- ✅ **顶部导航**：7个主要功能模块导航
+- ✅ **现代化UI**：基于Element Plus的优雅界面设计
+
+## 📁 项目结构
+
+```
+chengguo-web/
+├── src/
+│   ├── components/      # 公共组件
+│   ├── views/          # 页面组件
+│   │   ├── HomePage.vue           # 首页
+│   │   ├── AchievementCenter.vue  # 成果大厅
+│   │   └── AchievementDetail.vue  # 成果详情
+│   ├── router/         # 路由配置
+│   └── main.js         # 应用入口
+├── public/             # 静态资源
+├── index.html          # HTML模板
+├── vite.config.js      # Vite配置
+└── package.json        # 项目依赖
+```
+
+## 🛠️ 安装与运行
+
+### 环境要求
+- Node.js 16+
+- npm 8+
+
+### 开发环境
+
+1. **克隆项目**
+```bash
+git clone git@github.com:Survivor0102/web.git
+cd web
+git checkout web_chengguo
+```
+
+2. **安装依赖**
+```bash
+npm install
+```
+
+3. **启动开发服务器**
+```bash
+npm run dev
+```
+访问 `http://localhost:5173`
+
+### 生产构建
+```bash
+npm run build
+```
+构建产物位于 `dist/` 目录
+
+## 🚀 快速开始
+
+1. 访问主页，查看平台简介
+2. 点击"成果大厅"进入成果展示页面
+3. 使用筛选功能查找感兴趣的技术成果
+4. 点击"查看详情"了解成果详细信息
+5. 使用"我要对接"功能联系技术方
+
+## 📝 设计规范
+
+### 页面架构
+- **主页**: 平台介绍和功能导航
+- **成果大厅**: 成果列表、搜索筛选、分页展示
+- **成果详情**: 详细信息展示、附件下载、对接服务
+
+### 筛选条件
+- **技术领域**: 采矿技术、安全技术、自动化技术、环保技术、能源技术、数字化技术
+- **成果类型**: 专利、软件著作权、学术论文、设备装置、工艺方法、技术标准
+- **成熟度**: 实验室阶段、小试阶段、中试示范、产业化
+- **转化方式**: 技术转让、技术许可、合作开发、技术入股、技术服务
+
+### 对接流程
+1. 用户选择成果 → 2. 点击"我要对接" → 3. 智能客服引导 → 4. 选择问题类型 → 5. 获取模板回答或转人工
+
+## 🔧 配置说明
+
+### 环境变量
+项目支持以下环境变量：
+- `VITE_API_BASE_URL`: API基础地址（开发中）
+- `VITE_APP_TITLE`: 应用标题
+
+### 路由配置
+```javascript
+// 主要路由
+{
+  path: '/',                    // 主页
+  path: '/achievement-center',  // 成果大厅
+  path: '/achievement-detail/:id' // 成果详情
+}
+```
+
+## 📱 响应式设计
+
+- **桌面端** (≥1200px): 每行4个成果卡片
+- **平板端** (768px-1199px): 每行3个成果卡片
+- **移动端** (≤767px): 每行1个成果卡片，筛选器纵向排列
+
+## 🤝 贡献指南
+
+1. Fork 项目
+2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 开启 Pull Request
+
+## 📄 许可证
+
+本项目遵循 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
+
+## 📞 联系支持
+
+如有问题或建议，请通过GitHub Issues提交。
+
+---
+
+**项目状态**: 🟢 开发中  
+**最后更新**: 2024年4月7日  
+**版本**: 1.0.0
