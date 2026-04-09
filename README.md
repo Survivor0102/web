@@ -66,7 +66,7 @@ chengguo-web/
 
 1. **克隆项目**
 ```bash
-git clone git@github.com:Survivor0102/web.git
+git clone -b web_chengguo git@github.com:Survivor0102/web.git
 cd web
 git checkout web_chengguo
 ```
