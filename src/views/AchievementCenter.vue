@@ -1,122 +1,111 @@
 <template>
   <div class="achievement-center">
-    <!-- 页面标题 -->
-    <div class="page-header">
-      <h1>成果大厅</h1>
-      <p class="subtitle">展示最新的矿山技术创新成果，促进科技成果转化</p>
-    </div>
 
-    <!-- 搜索和筛选区域 -->
-    <el-card class="filter-card">
-      <div class="filter-section">
-        <!-- 搜索框 -->
-        <div class="search-row">
-          <div class="search-container">
-            <el-input
-              v-model="searchKeyword"
-              placeholder="搜索成果名称、关键词..."
-              class="search-input"
-              @keyup.enter="handleSearch"
-              size="large"
-            >
-              <template #append>
-                <el-button :icon="Search" @click="handleSearch" />
-              </template>
-            </el-input>
-            <div class="search-actions">
-              <el-button type="primary" @click="handleSearch" size="large">搜索</el-button>
-              <el-button @click="resetFilters" size="large">重置</el-button>
-            </div>
+    <!-- 搜索区域（带背景图片） -->
+    <div class="search-hero">
+      <div class="search-hero-content">
+        <div class="search-container-hero">
+          <el-input
+            v-model="searchKeyword"
+            placeholder="搜索成果名称、关键词..."
+            class="search-input-hero"
+            @keyup.enter="handleSearch"
+            size="large"
+          >
+            <template #append>
+              <el-button :icon="Search" @click="handleSearch" />
+            </template>
+          </el-input>
+          <div class="search-actions-hero">
+            <el-button type="primary" @click="handleSearch" size="large">搜索</el-button>
+            <el-button @click="resetFilters" size="large">重置</el-button>
           </div>
         </div>
+      </div>
+    </div>
 
-        <!-- 分类筛选 -->
-        <div class="filter-grid">
-          <div class="filter-column">
-            <div class="filter-group">
-              <div class="filter-header">
-                <span class="filter-icon">🔍</span>
-                <h3>技术领域</h3>
-              </div>
-              <el-select
-                v-model="selectedTechField"
-                placeholder="全部技术领域"
-                clearable
-                class="filter-select"
-                size="large"
+    <!-- 筛选区域 -->
+    <el-card class="filter-card-new">
+      <div class="filter-section-new">
+        <div class="filter-left-column">
+          <div class="filter-category">
+            <h3 class="filter-category-title">应用方向</h3>
+            <div class="filter-options">
+              <el-button
+                :type="selectedTechField === '' ? 'primary' : ''"
+                @click="toggleTechField('')"
+                size="small"
               >
-                <el-option
-                  v-for="item in techFields"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-            </div>
-
-            <div class="filter-group">
-              <div class="filter-header">
-                <span class="filter-icon">📊</span>
-                <h3>成果类型</h3>
-              </div>
-              <el-select
-                v-model="selectedAchievementType"
-                placeholder="全部成果类型"
-                clearable
-                class="filter-select"
-                size="large"
+                全部
+              </el-button>
+              <el-button
+                v-for="field in techFields"
+                :key="field.value"
+                :type="selectedTechField === field.value ? 'primary' : ''"
+                @click="toggleTechField(field.value)"
+                size="small"
               >
-                <el-option
-                  v-for="item in achievementTypes"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
+                {{ field.label }}
+              </el-button>
             </div>
           </div>
 
-          <div class="filter-column">
-            <div class="filter-group">
-              <div class="filter-header">
-                <span class="filter-icon">📈</span>
-                <h3>成熟度</h3>
-              </div>
-              <el-select
-                v-model="selectedMaturity"
-                placeholder="全部成熟度"
-                clearable
-                class="filter-select"
-                size="large"
+          <div class="filter-category">
+            <h3 class="filter-category-title">成熟度</h3>
+            <div class="filter-options">
+              <el-button
+                :type="selectedMaturity === '' ? 'primary' : ''"
+                @click="toggleMaturity('')"
+                size="small"
               >
-                <el-option
-                  v-for="item in maturities"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
+                全部
+              </el-button>
+              <el-button
+                v-for="maturity in maturities"
+                :key="maturity.value"
+                :type="selectedMaturity === maturity.value ? 'primary' : ''"
+                @click="toggleMaturity(maturity.value)"
+                size="small"
+              >
+                {{ maturity.label }}
+              </el-button>
             </div>
+          </div>
 
-            <div class="filter-group">
-              <div class="filter-header">
-                <span class="filter-icon">🔄</span>
-                <h3>转化方式</h3>
-              </div>
-              <el-select
-                v-model="selectedTransformation"
-                placeholder="全部转化方式"
-                clearable
-                class="filter-select"
-                size="large"
+          <div class="filter-category">
+            <h3 class="filter-category-title">拟转化方式</h3>
+            <div class="filter-options">
+              <el-button
+                :type="selectedTransformation === '' ? 'primary' : ''"
+                @click="toggleTransformation('')"
+                size="small"
               >
-                <el-option
-                  v-for="item in transformationMethods"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
+                全部
+              </el-button>
+              <el-button
+                v-for="method in transformationMethods"
+                :key="method.value"
+                :type="selectedTransformation === method.value ? 'primary' : ''"
+                @click="toggleTransformation(method.value)"
+                size="small"
+              >
+                {{ method.label }}
+              </el-button>
+            </div>
+          </div>
+
+          <div class="filter-category">
+            <h3 class="filter-category-title">所在地区</h3>
+            <div class="filter-options">
+              <el-button
+                v-for="region in regions"
+                :key="region.value"
+                :type="selectedRegion === region.value ? 'primary' : ''"
+                @click="toggleRegion(region.value)"
+                size="small"
+              >
+                {{ region.label }}
+              </el-button>
             </div>
           </div>
         </div>
@@ -126,68 +115,89 @@
     <!-- 成果列表 -->
     <div class="achievement-list">
       <div class="list-header">
-        <h2>成果展示</h2>
         <span class="total-count">共 {{ filteredAchievements.length }} 个成果</span>
       </div>
 
-      <el-row :gutter="20">
+      <el-row >
         <el-col
           v-for="achievement in paginatedAchievements"
           :key="achievement.id"
           :xs="24"
-          :sm="12"
-          :md="8"
-          :lg="6"
+          :sm="24"
+          :md="24"
+          :lg="24"
         >
           <el-card class="achievement-card" shadow="hover">
-            <template #header>
-              <div class="card-header">
-                <el-tag
-                  :type="getTechFieldTagType(achievement.techField)"
-                  size="small"
-                >
-                  {{ getTechFieldLabel(achievement.techField) }}
-                </el-tag>
-                <el-tag
-                  :type="getTypeTagType(achievement.type)"
-                  size="small"
-                  style="margin-left: 5px"
-                >
-                  {{ getTypeLabel(achievement.type) }}
-                </el-tag>
-              </div>
-            </template>
 
-            <div class="achievement-content">
-              <h3 class="achievement-title">{{ achievement.title }}</h3>
-              <p class="achievement-desc">{{ achievement.description }}</p>
-
-              <div class="achievement-meta">
-                <div class="meta-item">
-                  <span class="meta-label">成熟度：</span>
-                  <span>{{ getMaturityLabel(achievement.maturity) }}</span>
-                </div>
-                <div class="meta-item">
-                  <span class="meta-label">转化方式：</span>
-                  <span>{{ getTransformationLabel(achievement.transformation) }}</span>
-                </div>
-                <div class="meta-item">
-                  <span class="meta-label">发布时间：</span>
-                  <span>{{ achievement.publishDate }}</span>
+            <div class="achievement-content-new">
+              <!-- 标题区 -->
+              <div class="achievement-header">
+                <h3 class="achievement-title-new">{{ achievement.title }}</h3>
+                <div class="view-count-header">
+                  <span class="view-number">{{ achievement.viewCount }}</span>
+                  <span class="view-icon">人感兴趣</span>
                 </div>
               </div>
-            </div>
+              <div class="title-divider"></div>
 
-            <template #footer>
-              <div class="card-footer">
-                <el-button type="primary" @click="viewDetail(achievement.id)">
-                  查看详情
-                </el-button>
-                <el-button @click="handleContact(achievement.id)">
+              <!-- 详情信息区：三列布局 -->
+              <div class="detail-info-section">
+                <!-- 第一列 -->
+                <div class="info-column">
+                  <div class="info-row">
+                    <span class="info-label">成果编号：{{ achievement.code }}</span>
+                    
+                  </div>
+                  <div class="info-row">
+                    <span class="info-label">应用方向：{{ getTechFieldLabel(achievement.techField) }}</span>
+                  </div>
+                </div>
+
+                <!-- 第二列 -->
+                <div class="info-column">
+                  <div class="info-row">
+                    <span class="info-label">拟转化方式：{{ achievement.transformationText }}</span>
+                  </div>
+                  <div class="info-row">
+                    <span class="info-label">成熟度：{{ getMaturityLabel(achievement.maturity) }}</span>
+                  </div>
+                </div>
+
+                <!-- 第三列 -->
+                <div class="info-column">
+                  <div class="info-row">
+                    <span class="info-label">所在地区：{{ achievement.region }}</span>
+                  </div>
+                  <div class="info-row">
+                    <span class="info-label">成果持有人：{{ achievement.holder }}</span>
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- 交互区：右侧按钮 -->
+              <div class="interaction-section">
+                <el-button
+                  type="primary"
+                  @click="handleContact(achievement.id)"
+                  size="small"
+                  class="contact-button-1"
+                >
                   我要对接
                 </el-button>
+              <el-button
+                  type="primary"
+                  @click="goDetail(achievement.id)"
+                  size="small"
+                  class="contact-button-2"
+                >
+                  查看详情
+                </el-button>  
+                
               </div>
-            </template>
+              
+            </div>
+
           </el-card>
         </el-col>
       </el-row>
@@ -210,51 +220,7 @@
         <el-empty description="暂无相关成果" />
       </div>
     </div>
-
-    <!-- 客服对话框 -->
-    <el-dialog
-      v-model="contactDialogVisible"
-      title="我要对接"
-      width="500px"
-    >
-      <div class="contact-dialog">
-        <p>您好！我是智能客服，将为您提供对接服务。</p>
-        <p>请选择您想要咨询的问题：</p>
-        <el-radio-group v-model="selectedQuestion">
-          <el-radio
-            v-for="question in commonQuestions"
-            :key="question.id"
-            :label="question.id"
-          >
-            {{ question.text }}
-          </el-radio>
-        </el-radio-group>
-
-        <div v-if="selectedQuestion" class="answer-section">
-          <h4>回答：</h4>
-          <p>{{ getAnswer(selectedQuestion) }}</p>
-        </div>
-
-        <div class="human-service">
-          <p>如需人工客服，请点击下方按钮：</p>
-          <el-button type="warning" @click="requestHumanService">
-            请求人工客服
-          </el-button>
-          <p v-if="humanServiceRequested" class="human-service-note">
-            人工客服已收到您的请求，请稍等片刻...
-          </p>
-        </div>
-      </div>
-
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="contactDialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="contactDialogVisible = false">
-            确定
-          </el-button>
-        </span>
-      </template>
-    </el-dialog>
+    
   </div>
 </template>
 
@@ -268,9 +234,9 @@ const router = useRouter()
 // 搜索和筛选数据
 const searchKeyword = ref('')
 const selectedTechField = ref('')
-const selectedAchievementType = ref('')
 const selectedMaturity = ref('')
 const selectedTransformation = ref('')
+const selectedRegion = ref('all')
 
 // 分页数据
 const currentPage = ref(1)
@@ -287,17 +253,8 @@ const techFields = ref([
   { value: 'safety', label: '安全技术' },
   { value: 'automation', label: '自动化技术' },
   { value: 'environment', label: '环保技术' },
-  { value: 'energy', label: '能源技术' },
+  { value: 'green-energy', label: '绿色能源' },
   { value: 'digital', label: '数字化技术' }
-])
-
-const achievementTypes = ref([
-  { value: 'patent', label: '专利' },
-  { value: 'software', label: '软件著作权' },
-  { value: 'paper', label: '学术论文' },
-  { value: 'equipment', label: '设备装置' },
-  { value: 'process', label: '工艺方法' },
-  { value: 'standard', label: '技术标准' }
 ])
 
 const maturities = ref([
@@ -315,6 +272,18 @@ const transformationMethods = ref([
   { value: 'service', label: '技术服务' }
 ])
 
+// 所在地区筛选
+const regions = ref([
+  { value: 'all', label: '全部' },
+  { value: 'north', label: '华北地区' },
+  { value: 'east', label: '华东地区' },
+  { value: 'south', label: '华南地区' },
+  { value: 'central', label: '华中地区' },
+  { value: 'northeast', label: '东北地区' },
+  { value: 'northwest', label: '西北地区' },
+  { value: 'southwest', label: '西南地区' }
+])
+
 // 常见问题
 const commonQuestions = ref([
   { id: '1', text: '这项技术的具体参数是什么？', answer: '具体技术参数请联系技术负责人获取详细资料。' },
@@ -327,122 +296,158 @@ const commonQuestions = ref([
 const achievements = ref([
   {
     id: 1,
-    title: '智能化矿山安全监测系统',
-    description: '基于物联网的矿山安全实时监测系统，实现安全隐患预警。',
-    techField: 'safety',
-    type: 'software',
-    maturity: 'industrialization',
-    transformation: 'transfer',
+    title: 'PEM 电解制氢关键部件及系统产业化',
+    code: 'CG260100131',
+    techField: 'green-energy',
+    transformation: 'license',
+    transformationText: '技术许可、自行投资转化（创业转化）',
+    maturity: 'demonstration',
+    region: '山东省・青岛市',
+    holder: '中科院青岛能源所',
+    viewCount: 5,
     publishDate: '2024-03-15'
   },
   {
     id: 2,
-    title: '高效节能采矿设备',
-    description: '新型采矿设备，能耗降低30%，效率提升25%。',
-    techField: 'mining',
-    type: 'equipment',
-    maturity: 'demonstration',
-    transformation: 'cooperation',
-    publishDate: '2024-02-28'
+    title: '生物天然气产业化',
+    code: 'CG260100132',
+    techField: 'green-energy',
+    transformation: 'license',
+    transformationText: '技术许可、合作开发',
+    maturity: 'pilot',
+    region: '北京市',
+    holder: '中国石油大学',
+    viewCount: 8,
+    publishDate: '2024-03-10'
   },
   {
     id: 3,
     title: '矿山废水处理新工艺',
-    description: '环保型废水处理技术，处理效率高，运行成本低。',
+    code: 'CG260100133',
     techField: 'environment',
-    type: 'process',
-    maturity: 'pilot',
     transformation: 'license',
+    transformationText: '技术许可、技术服务',
+    maturity: 'pilot',
+    region: '江苏省・南京市',
+    holder: '南京工业大学',
+    viewCount: 12,
     publishDate: '2024-03-10'
   },
   {
     id: 4,
     title: '矿山数字化管理平台',
-    description: '集成生产、安全、设备的全方位数字化管理平台。',
+    code: 'CG260100134',
     techField: 'digital',
-    type: 'software',
-    maturity: 'industrialization',
     transformation: 'service',
+    transformationText: '技术服务、合作开发',
+    maturity: 'industrialization',
+    region: '北京市',
+    holder: '清华大学',
+    viewCount: 25,
     publishDate: '2024-01-20'
   },
   {
     id: 5,
     title: '智能通风控制系统',
-    description: '基于AI的矿井通风智能调控系统，节能效果显著。',
+    code: 'CG260100135',
     techField: 'automation',
-    type: 'patent',
-    maturity: 'demonstration',
     transformation: 'investment',
+    transformationText: '技术入股、技术服务',
+    maturity: 'demonstration',
+    region: '山西省・太原市',
+    holder: '太原理工大学',
+    viewCount: 18,
     publishDate: '2024-03-05'
   },
   {
     id: 6,
     title: '矿山地质灾害预警技术',
-    description: '先进的地质灾害监测预警技术，准确率高达95%。',
+    code: 'CG260100136',
     techField: 'safety',
-    type: 'patent',
-    maturity: 'laboratory',
     transformation: 'transfer',
+    transformationText: '技术转让、技术许可',
+    maturity: 'laboratory',
+    region: '四川省・成都市',
+    holder: '四川大学',
+    viewCount: 9,
     publishDate: '2024-02-15'
   },
   {
     id: 7,
     title: '清洁能源采矿技术',
-    description: '利用清洁能源替代传统能源的绿色采矿技术。',
-    techField: 'energy',
-    type: 'process',
-    maturity: 'pilot',
+    code: 'CG260100137',
+    techField: 'green-energy',
     transformation: 'cooperation',
+    transformationText: '合作开发、技术许可',
+    maturity: 'pilot',
+    region: '内蒙古・呼和浩特市',
+    holder: '内蒙古工业大学',
+    viewCount: 15,
     publishDate: '2024-03-01'
   },
   {
     id: 8,
     title: '矿山机器人巡检系统',
-    description: '自主巡检机器人系统，替代人工完成危险区域巡检。',
+    code: 'CG260100138',
     techField: 'automation',
-    type: 'equipment',
-    maturity: 'demonstration',
     transformation: 'license',
+    transformationText: '技术许可、技术服务',
+    maturity: 'demonstration',
+    region: '辽宁省・沈阳市',
+    holder: '东北大学',
+    viewCount: 22,
     publishDate: '2024-02-10'
   },
   {
     id: 9,
     title: '尾矿资源化利用技术',
-    description: '将尾矿转化为建筑材料的技术，实现资源循环利用。',
+    code: 'CG260100139',
     techField: 'environment',
-    type: 'process',
-    maturity: 'industrialization',
     transformation: 'transfer',
+    transformationText: '技术转让、技术许可',
+    maturity: 'industrialization',
+    region: '河北省・唐山市',
+    holder: '华北理工大学',
+    viewCount: 31,
     publishDate: '2024-01-30'
   },
   {
     id: 10,
     title: '智能选矿控制系统',
-    description: '基于机器学习的选矿过程优化控制系统。',
+    code: 'CG260100140',
     techField: 'automation',
-    type: 'software',
-    maturity: 'pilot',
     transformation: 'service',
+    transformationText: '技术服务、合作开发',
+    maturity: 'pilot',
+    region: '湖南省・长沙市',
+    holder: '中南大学',
+    viewCount: 19,
     publishDate: '2024-03-12'
   },
   {
     id: 11,
     title: '矿山应急救援装备',
-    description: '新型应急救援装备，提高救援效率和安全保障。',
+    code: 'CG260100141',
     techField: 'safety',
-    type: 'equipment',
-    maturity: 'demonstration',
     transformation: 'cooperation',
+    transformationText: '合作开发、技术许可',
+    maturity: 'demonstration',
+    region: '陕西省・西安市',
+    holder: '西安科技大学',
+    viewCount: 27,
     publishDate: '2024-02-25'
   },
-    {
+  {
     id: 12,
     title: '数字化矿山建模软件',
-    description: '三维矿山建模与可视化软件，支持生产决策。',
+    code: 'CG260100142',
     techField: 'digital',
-    type: 'software',
-    maturity: 'industrialization',
     transformation: 'license',
+    transformationText: '技术许可、技术服务',
+    maturity: 'industrialization',
+    region: '上海市',
+    holder: '同济大学',
+    viewCount: 34,
     publishDate: '2024-03-08'
   }
 ])
@@ -452,16 +457,13 @@ const filteredAchievements = computed(() => {
   return achievements.value.filter(item => {
     // 关键词搜索
     const keywordMatch = !searchKeyword.value ||
-      item.title.toLowerCase().includes(searchKeyword.value.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchKeyword.value.toLowerCase())
+      item.title.toLowerCase().includes(searchKeyword.value.toLowerCase()) 
+
 
     // 技术领域筛选
     const techFieldMatch = !selectedTechField.value ||
       item.techField === selectedTechField.value
-
-    // 成果类型筛选
-    const typeMatch = !selectedAchievementType.value ||
-      item.type === selectedAchievementType.value
+    
 
     // 成熟度筛选
     const maturityMatch = !selectedMaturity.value ||
@@ -471,8 +473,28 @@ const filteredAchievements = computed(() => {
     const transformationMatch = !selectedTransformation.value ||
       item.transformation === selectedTransformation.value
 
-    return keywordMatch && techFieldMatch && typeMatch &&
-           maturityMatch && transformationMatch
+    // 所在地区筛选
+    const regionMatch = selectedRegion.value === 'all' || !selectedRegion.value ||
+  (() => {
+    // 简单地区匹配逻辑
+    const regionMap = {
+      'north': ['北京', '天津', '河北', '山西', '内蒙古'],
+      'east': ['上海', '江苏', '浙江', '安徽', '福建', '江西', '山东'],
+      'south': ['广东', '广西', '海南'],
+      'central': ['河南', '湖北', '湖南'],
+      'northeast': ['辽宁', '吉林', '黑龙江'],
+      'northwest': ['陕西', '甘肃', '青海', '宁夏', '新疆'],
+      'southwest': ['四川', '贵州', '云南', '重庆', '西藏']
+    }
+    
+    const selected = regionMap[selectedRegion.value]
+    if (!selected) return true
+    
+    return selected.some(area => item.region.includes(area))
+  })()
+
+    return keywordMatch && techFieldMatch &&
+           maturityMatch && transformationMatch && regionMatch
   })
 })
 
@@ -483,50 +505,15 @@ const paginatedAchievements = computed(() => {
   return filteredAchievements.value.slice(start, end)
 })
 
-// 辅助函数 - 获取标签类型
-const getTechFieldTagType = (value) => {
-  const types = {
-    'mining': 'primary',
-    'safety': 'danger',
-    'automation': 'success',
-    'environment': 'warning',
-    'energy': 'info',
-    'digital': ''
-  }
-  return types[value] || ''
-}
-
-const getTypeTagType = (value) => {
-  const types = {
-    'patent': 'success',
-    'software': 'primary',
-    'paper': 'warning',
-    'equipment': 'danger',
-    'process': 'info',
-    'standard': ''
-  }
-  return types[value] || ''
-}
-
 // 辅助函数 - 获取标签文本
 const getTechFieldLabel = (value) => {
   const field = techFields.value.find(item => item.value === value)
   return field ? field.label : value
 }
 
-const getTypeLabel = (value) => {
-  const type = achievementTypes.value.find(item => item.value === value)
-  return type ? type.label : value
-}
-
 const getMaturityLabel = (value) => {
   const maturity = maturities.value.find(item => item.value === value)
   return maturity ? maturity.label : value
-}
-
-const getTransformationLabel = (value) => {
-  const method = transformationMethods.value.find(item => item.value === value)
-  return method ? method.label : value
 }
 
 const getAnswer = (questionId) => {
@@ -543,9 +530,30 @@ const handleSearch = () => {
 const resetFilters = () => {
   searchKeyword.value = ''
   selectedTechField.value = ''
-  selectedAchievementType.value = ''
   selectedMaturity.value = ''
   selectedTransformation.value = ''
+  selectedRegion.value = 'all'
+  currentPage.value = 1
+}
+
+// 筛选按钮切换方法
+const toggleTechField = (value) => {
+  selectedTechField.value = selectedTechField.value === value ? '' : value
+  currentPage.value = 1
+}
+
+const toggleMaturity = (value) => {
+  selectedMaturity.value = selectedMaturity.value === value ? '' : value
+  currentPage.value = 1
+}
+
+const toggleTransformation = (value) => {
+  selectedTransformation.value = selectedTransformation.value === value ? '' : value
+  currentPage.value = 1
+}
+
+const toggleRegion = (value) => {
+  selectedRegion.value = selectedRegion.value === value ? '' : value
   currentPage.value = 1
 }
 
@@ -558,14 +566,22 @@ const handleCurrentChange = (page) => {
   currentPage.value = page
 }
 
-const viewDetail = (id) => {
-  router.push(`/achievement-detail/${id}`)
+// const handleContact = (id) => {
+//   selectedQuestion.value = ''
+//   humanServiceRequested.value = false
+//   contactDialogVisible.value = true
+// }
+
+const handleContact = () => {
+  contactDialogVisible.value = true
 }
 
-const handleContact = (id) => {
-  selectedQuestion.value = ''
-  humanServiceRequested.value = false
-  contactDialogVisible.value = true
+// 跳转到详情页
+const goDetail = (id) => {
+  router.push({
+    name: 'AchievementDetail', // 用你路由里的 name
+    params: { id }
+  })
 }
 
 const requestHumanService = () => {
@@ -580,142 +596,43 @@ onMounted(() => {
 
 <style scoped>
 .achievement-center {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
 }
-
-.page-header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.page-header h1 {
-  font-size: 32px;
-  margin-bottom: 10px;
-  color: #303133;
-}
-
-.subtitle {
-  font-size: 16px;
-  color: #909399;
-}
-
-.filter-card {
-  margin-bottom: 30px;
-}
-
-.filter-section {
-  padding: 10px 0;
-}
-
-.search-row {
-  margin-bottom: 25px;
-}
-
-/* .search-input {
-  flex: 1;
-  max-width: 400px;
-} */
-
-/* .filter-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  align-items: center;
-} */
-
-/* .filter-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-} */
-
-/* .filter-label {
-  font-weight: 500;
-  white-space: nowrap;
-} */
 
 .achievement-list {
-  margin-top: 30px;
+  margin-top: 5px;
+  padding: 0 20px;
 }
 
 .list-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-}
-
-.list-header h2 {
-  font-size: 24px;
-  color: #303133;
+  margin-bottom: 10px;
+  margin-left:100px;
 }
 
 .total-count {
   color: #909399;
-  font-size: 14px;
+  font-size: 20px;
 }
 
+/* 成果卡片改进 - 横向布局 */
 .achievement-card {
-  height: 100%;
-  margin-bottom: 20px;
-  transition: transform 0.3s;
-}
-
-.achievement-card:hover {
-  transform: translateY(-5px);
-}
-
-.card-header {
-  display: flex;
-  align-items: center;
-}
-
-.achievement-content {
-  min-height: 200px;
-}
-
-.achievement-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: #303133;
-  line-height: 1.4;
-}
-
-.achievement-desc {
-  font-size: 14px;
-  color: #606266;
-  line-height: 1.5;
-  margin-bottom: 15px;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  border-radius: 4px;
   overflow: hidden;
-}
-
-.achievement-meta {
-  margin-top: 15px;
-  padding-top: 15px;
-  border-top: 1px solid #ebeef5;
-}
-
-.meta-item {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 5px;
-  font-size: 13px;
-}
-
-.meta-label {
-  color: #909399;
-  font-weight: 500;
-}
-
-.card-footer {
-  display: flex;
-  justify-content: space-between;
+  border: 1px solid #ebeef5;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.04);
+  margin-bottom: 12px;
+  background-color: #fff;
+  transition: all 0.3s ease;
+  /* 从第647行添加的宽度控制 */
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+  max-height: 160px;
 }
 
 .pagination {
@@ -756,115 +673,221 @@ onMounted(() => {
   font-size: 14px;
 }
 
-/* 更新搜索区域样式 */
-.search-container {
+
+/* 搜索英雄区域 */
+.search-hero {
+  background-image: url('@/assets/搜索框背景.png');
+  background-size: cover;
+  background-position: center;
+  height: 20vh;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.search-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.search-hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+}
+
+.search-container-hero {
   display: flex;
   align-items: center;
   gap: 15px;
   width: 100%;
 }
 
-.search-input {
+.search-input-hero {
   flex: 1;
 }
 
-.search-actions {
+.search-actions-hero {
   display: flex;
   gap: 10px;
 }
 
-/* 更新筛选区域样式 */
-.filter-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 25px;
-  margin-top: 20px;
+/* 新筛选区域 */
+.filter-card-new {
+  margin-bottom: 5px;
+  border: none;
+  box-shadow: none;
+  padding: 0 20px;
 }
 
-.filter-column {
+.filter-section-new {
+  padding: 15px 0;
+}
+
+.filter-left-column {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.filter-group {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 20px;
-  border: 1px solid #e9ecef;
-  transition: all 0.3s ease;
-}
-
-.filter-group:hover {
-  background: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border-color: #409eff;
-}
-
-.filter-header {
+.filter-category {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
+  align-items: flex-start;
+  gap: 15px;
 }
 
-.filter-icon {
-  font-size: 20px;
-}
-
-.filter-header h3 {
-  font-size: 16px;
+.filter-category-title {
+  font-size: 14px;
   font-weight: 600;
   color: #303133;
   margin: 0;
+  min-width: 80px;
+  line-height: 32px;
+  white-space: nowrap;
 }
 
-.filter-select {
+.filter-options {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 5px;
+  flex: 1;
+}
+
+.achievement-card:hover {
+  background-color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.08);
+  border-color: #409eff;
+}
+
+/* 新成果卡片布局 */
+.achievement-content-new {
+  display: flex;
+  position: relative;
+  right:20px;
+  min-height: 120px;
+}
+
+.achievement-header {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 160px;
+  display: flex;
+  align-items: center;
+
+}
+
+.achievement-title-new {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  flex: 1;
+}
+
+.view-count-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #909399;
+  font-size: 14px;
+}
+
+.view-icon {
+  font-size: 16px;
+}
+
+.title-divider {
+  position: absolute;
+  top: 30px;
+  left: 20px;
+  right: 160px;
+  height: 1px;
+  background-color: #ebeef5;
+  margin: 8px 0;
+}
+
+
+
+.detail-info-section {
+  position: absolute;
+  top: 70px;
+  left: 20px;
+  right: 160px;
+  display: flex;
+  gap: 30px;
+}
+
+.info-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.info-label {
+  color: #606266;
+  font-weight: 500;
+  max-width: 0px;
+  white-space: nowrap;
+}
+
+.info-content {
+  color: #303133;
+  flex: 1;
+}
+
+.interaction-section {
+  position: absolute;
+  top: 50%;
+  left: auto;     /* 关键：不让左边影响它 */
+  right: 20px;
+  transform: translateY(-15%);
+  width: 120px;
+  display: flex; /* 新增：弹性布局 */
+  flex-direction: column; /* 新增：垂直排列 */
+  gap: 12px; /* 新增：按钮之间的间距，可自行调整 */
+  align-items: flex-end;
+}
+
+
+.contact-button-1 {
   width: 100%;
+  height: 36px;
+  font-weight: 600;
+  border-radius: 18px;
+  text-align: center;
+
 }
 
-/* 成果卡片改进 */
-.achievement-card {
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid #e9ecef;
+.contact-button-2{
+  width: 100%;
+  height: 36px;
+  font-weight: 600;
+  border-radius: 18px;
+  text-align: center;
 }
 
-.achievement-content {
-  min-height: 180px;
-}
-
-/* 响应式调整 */
-@media (max-width: 768px) {
-  .filter-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-
-  .filter-column {
-    gap: 15px;
-  }
-
-  .filter-group {
-    padding: 15px;
-  }
-
-  .search-container {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .search-actions {
-    width: 100%;
-    justify-content: flex-end;
-  }
-
-  .search-input {
-    width: 100%;
-  }
-
-  .achievement-content {
-    min-height: auto;
-  }
-}
 </style>

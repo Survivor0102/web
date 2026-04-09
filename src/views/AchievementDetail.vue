@@ -685,24 +685,4 @@ onMounted(() => {
   font-size: 14px;
 }
 
-@media (max-width: 768px) {
-  .detail-header {
-    flex-direction: column;
-  }
-
-  .title-section {
-    margin-right: 0;
-    margin-bottom: 20px;
-  }
-
-  .action-section {
-    width: 100%;
-    flex-direction: row;
-    justify-content: flex-start;
-  }
-
-  .tag-section {
-    flex-wrap: wrap;
-  }
-}
 </style>
